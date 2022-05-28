@@ -1,0 +1,64 @@
+// StBoite embedded Display RPC protocol version 1.0
+//
+// This file defines version 1.0 of the RPC protocol. To implement a new display
+// against this protocol, copy this definition into your own codebase and
+// use protoc to generate stubs for your target language.
+//
+// This file will not be updated. Any minor versions of protocol 1 to follow
+// should copy this file and modify the copy while maintaining backwards
+// compatibility. Breaking changes, if any are required, will come
+// in a subsequent major version with its own separate proto definition.
+//
+// Note that this description comes from the well described TF plugin RCP protocol,
+// available on https://github.com/hashicorp/terraform-plugin-go/blob/main/tfprotov6/internal/tfplugin6/tfplugin6.proto
+//
+
+syntax = "proto3";
+package stboite.v1.display;
+
+// RenderingService provides an API to display an image on a specific device.
+service RenderingService {
+    // DisplayRendering displays the encapsulated image on the device.
+    rpc DisplayRendering(RenderingRequest) returns (RenderingResponse);
+}
+
+message RenderingRequest {
+    // PixelType defines the type and depth of a pixel in the image 
+    // (aka. pillow.Mode (https://pillow.readthedocs.io/en/stable/handbook/concepts.html#modes)).
+    enum PixelType { 
+        // 1-bit pixels, black and white, stored with one pixel per byte
+        ONE = 0;
+        // 8-bit pixels, black and white
+        L = 1;
+        // 3x8-bit pixels, true color
+        RGB = 2;
+        // 4x8-bit pixels, true color with transparency mask
+        RGBA = 3;
+        // 4x8-bit pixels, color separation
+        CMYK = 4;
+        // 3x8-bit pixels, color video format
+        YCBCR = 5;
+        // 3x8-bit pixels, the L*a*b color space
+        LAB = 6;
+        // 3x8-bit pixels, Hue, Saturation, Value color space
+        HSV = 7;
+    }
+
+    PixelType type = 1;
+    uint32 height = 2;
+    uint32 width = 3;
+    bytes data = 4;
+}
+
+message RenderingResponse {
+    // StatusCode defines the gRPC status code related to a rendering response
+    enum StatusCode {
+        OK = 0;
+        PIXEL_TYPE_NOT_ALLOWED = 1;
+        DIMENSION_NOT_ALLOWED = 2;
+        INVALID_PAYLOAD = 3;
+    }
+
+    StatusCode status = 1;
+    string details = 2;
+}

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "StBoite.protos"
+description = "StBoite is a device used to spread your backup across several other StBoite devices."
+keywords = ["syncthing", "stboite", "backup", "protobuff"]
+license = {text = "GNU Affero General Public License v3 or later (AGPLv3+)"}
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "Framework :: AsyncIO",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Cython",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet",
+    "Topic :: System :: Archiving :: Backup"
+]
+dependencies = [
+    "grpcio >= 1.46.3",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+grpc = ["grpcio-tools >= 1.46.3"]
+
+
+[tool.setuptools.package-dir]
+"StBoite.protos.v1" = "v1"
