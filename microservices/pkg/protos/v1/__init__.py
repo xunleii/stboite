@@ -12,8 +12,3 @@
 # 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# flake8: noqa
-
-from .stboite_display_pb2 import RenderingRequest, RenderingResponse
-from .stboite_display_pb2_grpc import RenderingService, RenderingServiceServicer, RenderingServiceStub, add_RenderingServiceServicer_to_server
