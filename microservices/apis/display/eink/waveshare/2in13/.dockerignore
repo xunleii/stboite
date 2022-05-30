@@ -1,5 +1,0 @@
-# ignore all related python environment
-__pycache__/
-
-# example test folder
-example/

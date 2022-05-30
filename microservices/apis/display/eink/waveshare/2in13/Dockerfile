@@ -24,7 +24,6 @@ RUN pipenv install --system
 FROM python:3.10-slim
 
 COPY --from=builder-image /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY . /app
-WORKDIR /app
+COPY waveshare_2in13.py /app/waveshare_2in13
 
-CMD [ "/app/grpc_server.py" ]
+CMD [ "/app/waveshare_2in13" ]
