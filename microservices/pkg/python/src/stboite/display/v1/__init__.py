@@ -20,8 +20,8 @@ import string
 import sys
 import grpc
 
-from StBoite.protos.v1.stboite_display_pb2_grpc import RenderingServiceServicer, add_RenderingServiceServicer_to_server  # noqa: E501
-from StBoite.protos.v1.stboite_display_pb2 import RenderingRequest, RenderingResponse  # noqa: E501
+from stboite.grpc.v1.stboite_display_pb2_grpc import RenderingServiceServicer, add_RenderingServiceServicer_to_server  # noqa: E501
+from stboite.grpc.v1.stboite_display_pb2 import RenderingRequest, RenderingResponse  # noqa: E501
 
 from typing import Optional
 

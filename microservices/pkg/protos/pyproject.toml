@@ -35,4 +35,4 @@ grpc = ["grpcio-tools >= 1.46.3"]
 
 
 [tool.setuptools.package-dir]
-"StBoite.protos.v1" = "v1"
+"stboite.grpc.v1" = "v1"

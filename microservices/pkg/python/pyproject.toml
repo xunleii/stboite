@@ -36,4 +36,4 @@ grpc = ["grpcio-tools >= 1.46.3"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["StBoite.display.v1"]
+packages = ["stboite.display.v1"]
