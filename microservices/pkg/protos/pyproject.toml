@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "StBoite.protos"
+name = "stboite.grpc"
 description = "StBoite is a device used to spread your backup across several other StBoite devices."
 keywords = ["syncthing", "stboite", "backup", "protobuff"]
 license = {text = "GNU Affero General Public License v3 or later (AGPLv3+)"}
