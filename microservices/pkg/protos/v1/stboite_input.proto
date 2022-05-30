@@ -1,0 +1,35 @@
+// Copyright (C) 2022 xunleii
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+// 
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+syntax = "proto3";
+package stboite.v1.input;
+
+import "google/protobuf/empty.proto";
+
+// TouchInputService provides an API to handle touch screen event on a specific device.
+service TouchInputService {
+    // HandleTouchEvent handles a touch screen event comming from the device.
+    rpc HandleTouchEvent(TouchEvent) returns (google.protobuf.Empty);
+}
+
+message TouchEvent {
+    // Point contains location and pressure information
+    message Point {
+        uint32 X = 1;
+        uint32 Y = 2;
+        uint32 Pressure = 3;
+    }
+    repeated Point points = 1;
+}
