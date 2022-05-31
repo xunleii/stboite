@@ -202,4 +202,4 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.getLevelName(args.log_level.upper()))
 
-    asyncio.run(main())
+    asyncio.run(main(args.listen_addr))
