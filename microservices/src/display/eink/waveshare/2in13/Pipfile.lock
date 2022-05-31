@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8a1c6180a9a8784970ee7e6d3171eb229b43be12ae588cb68b9a8389d202c3b6"
+            "sha256": "cc6178040f8b15f441dbece58c0e89e972323339bdfa43ea11c9fc71145611b0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -219,12 +219,17 @@
         },
         "stboite": {
             "git": "https://github.com/xunleii/stboite.git",
-            "ref": "45807b2113451444ab8885912054b69e2564db91",
+            "ref": "4e69cb6cf170204e83a4946355c2cc7b52b86298",
             "subdirectory": "microservices/pkg/python"
         },
-        "stboite-protos": {
+        "stboite-grpc": {
             "git": "https://github.com/xunleii/stboite.git",
-            "ref": "45807b2113451444ab8885912054b69e2564db91",
+            "ref": "4e69cb6cf170204e83a4946355c2cc7b52b86298",
+            "subdirectory": "microservices/pkg/protos"
+        },
+        "stboite.grpc": {
+            "git": "https://github.com/xunleii/stboite.git",
+            "ref": "main",
             "subdirectory": "microservices/pkg/protos"
         },
         "waveshare-etp": {

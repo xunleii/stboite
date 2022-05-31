@@ -25,8 +25,8 @@ import string
 from typing import Optional
 
 from PIL import Image
-from StBoite.display.v1 import GRPCDisplay
-from StBoite.protos.v1 import RenderingRequest, RenderingResponse
+from stboite.display.v1 import GRPCDisplay
+from stboite.grpc.v1. import RenderingRequest, RenderingResponse
 from TP_lib import epd2in13_V2
 
 
