@@ -16,21 +16,20 @@
 
 import argparse
 import asyncio
-from datetime import datetime
-from enum import Enum
-import grpc
 import logging
 import signal
-import string
+from datetime import datetime
+from enum import Enum
 from typing import Optional
 
+import grpc
 from PIL import Image
-from stboite.display.v1 import GRPCDisplay
-from stboite.grpc.v1. import RenderingRequest, RenderingResponse
+from stboite.grpc.v1.stboite_display_pb2_grpc import RenderingServiceServicer, add_RenderingServiceServicer_to_server
+from stboite.grpc.v1.stboite_display_pb2 import RenderingRequest, RenderingResponse
 from TP_lib import epd2in13_V2
 
 
-class eInk_Waveshare_2in13(GRPCDisplay):
+class eInk_Waveshare_2in13(RenderingServiceServicer):
     """Implements the gRPC display server to the eInk Waveshare 2.13inch screen
     """
     class Mode(Enum):
@@ -47,32 +46,12 @@ class eInk_Waveshare_2in13(GRPCDisplay):
     __last_refresh: datetime
     __running: bool = True
 
-    def __init__(self, listen_addr: string):
-        super().__init__(listen_addr=listen_addr)
-
+    def __init__(self):
         self.__epd = epd2in13_V2.EPD_2IN13_V2()
         self.__full_update_mode()
         self.__epd.Clear(0xFF)
         # TODO: display a splashscreen
         self.__last_refresh = datetime.now()
-
-    async def wait_for_termination(self,
-                                   timeout: Optional[float] = None) -> None:
-        return await asyncio.gather(
-            self.__eink_loop(),
-            super().wait_for_termination(timeout)
-        )
-
-    def pre_stop(self):
-        self.__running = False
-        return super().pre_stop()
-
-    async def stop(self, grace: Optional[float] = None) -> None:
-        async def stop():
-            self.__epd.sleep()
-            await asyncio.sleep(grace)
-            self.__epd.Dev_exit()
-        return await asyncio.gather(stop(), super().stop(grace))
 
     async def DisplayRendering(
         self,
@@ -101,7 +80,8 @@ class eInk_Waveshare_2in13(GRPCDisplay):
 
         return RenderingResponse(status=RenderingResponse.OK)
 
-    async def __eink_loop(self) -> None:
+
+    async def wait_for_termination(self) -> None:
         """Asynchronous loop running in parallel to the gRPC server and
         handling some precautions given by Waveshare:
 
@@ -142,6 +122,14 @@ class eInk_Waveshare_2in13(GRPCDisplay):
                 self.__logging.debug("last frame has been displayed 1 min ago, enter in deep sleep mode")  # noqa: E501
                 self.__sleep_mode()
 
+    def cancel(self) -> None:
+        self.__running = False
+
+    async def stop(self, grace: float) -> None:
+        self.__epd.sleep()
+        await asyncio.sleep(grace)
+        self.__epd.Dev_exit()
+
     def __sleep_mode(self) -> None:
         if self.__current_mode is not self.Mode.DEEP_SLEEP:
             self.__logging.debug("eInk screen entering in deep sleep mode (low consumption).")  # noqa: E501
@@ -175,6 +163,33 @@ class eInk_Waveshare_2in13(GRPCDisplay):
         return logging.getLogger("eInk_Waveshare_2in13")
 
 
+async def main(listen_addr: str):
+    server = grpc.aio.server()
+    server.add_insecure_port(listen_addr)
+
+    service = eInk_Waveshare_2in13()
+    add_RenderingServiceServicer_to_server(service, server)
+
+    loop = asyncio.get_event_loop()
+    loop.add_signal_handler(signal.SIGINT, service.cancel)
+    loop.add_signal_handler(signal.SIGTERM, service.cancel)
+
+    try:
+        logging.info("starting server on %s", listen_addr)
+        await server.start()
+        await asyncio.wait(
+            [asyncio.create_task(server.wait_for_termination()),
+             asyncio.create_task(service.wait_for_termination())],
+            return_when=asyncio.FIRST_COMPLETED
+        )
+    finally:
+        await asyncio.wait(
+            [asyncio.create_task(server.stop(5)),
+             asyncio.create_task(service.stop(2))],
+            return_when=asyncio.ALL_COMPLETED
+        )
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="gRPC API for Waveshare 2.13inch eInk screen.",
@@ -186,16 +201,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.getLevelName(args.log_level.upper()))
-    loop = asyncio.get_event_loop()
 
-    server = eInk_Waveshare_2in13(args.listen_addr)
-    loop.add_signal_handler(signal.SIGINT, server.pre_stop)
-    loop.add_signal_handler(signal.SIGTERM, server.pre_stop)
-
-    try:
-        logging.info("starting server on %s", args.listen_addr)
-        loop.run_until_complete(server.start())
-        loop.run_until_complete(server.wait_for_termination())
-    finally:
-        loop.run_until_complete(server.stop(5))
-        loop.close()
+    asyncio.run(main())

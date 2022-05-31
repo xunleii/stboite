@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cc6178040f8b15f441dbece58c0e89e972323339bdfa43ea11c9fc71145611b0"
+            "sha256": "b2d5090967120855a0cda56ecf76a5f57f560f10609732080361aec2d2123af4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -217,14 +217,9 @@
             "index": "pypi",
             "version": "==3.5"
         },
-        "stboite": {
-            "git": "https://github.com/xunleii/stboite.git",
-            "ref": "4e69cb6cf170204e83a4946355c2cc7b52b86298",
-            "subdirectory": "microservices/pkg/python"
-        },
         "stboite-grpc": {
             "git": "https://github.com/xunleii/stboite.git",
-            "ref": "4e69cb6cf170204e83a4946355c2cc7b52b86298",
+            "ref": "38176f32dd48cd53beec1d140f674c7075d34899",
             "subdirectory": "microservices/pkg/protos"
         },
         "stboite.grpc": {

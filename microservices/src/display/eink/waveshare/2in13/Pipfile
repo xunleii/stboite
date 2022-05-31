@@ -12,7 +12,6 @@ protobuf = "==3.20.1"
 six = "==1.16.0"
 smbus = "==1.1.post2"
 spidev = "==3.5"
-stboite = {subdirectory = "microservices/pkg/python", ref = "main", git = "https://github.com/xunleii/stboite.git"}
 "stboite.grpc" = {subdirectory = "microservices/pkg/protos", ref = "main", git = "https://github.com/xunleii/stboite.git"}
 waveshare-etp = {subdirectory = "python", ref = "c8f097d1b81b9695566fdbded3c26130d2a61026", git = "https://github.com/waveshare/Touch_e-Paper_HAT.git"}
 
